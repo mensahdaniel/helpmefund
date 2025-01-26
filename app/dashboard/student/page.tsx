@@ -2,15 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { ProjectStats } from "@/components/dashboard/ProjectStats";
-import { ProjectsTable } from "@/components/dashboard/ProjectsTable";
-import { RecentDonations } from "@/components/dashboard/RecentDonations";
+import { getUserProjects } from "@/lib/firebase/projects";
+import { StudentStats } from "@/components/dashboard/student/StudentStats";
+import { ProjectsList } from "@/components/dashboard/student/ProjectsList";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { getUserProjects } from "@/lib/firebase/projects";
+import { DashboardHeader } from "@/components/shared/DashboardHeader";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
@@ -20,57 +18,43 @@ export default function StudentDashboard() {
   useEffect(() => {
     async function fetchProjects() {
       if (user) {
-        const data = await getUserProjects(user.uid);
-        setProjects(data);
-        setLoading(false);
+        try {
+          const userProjects = await getUserProjects(user.uid);
+          setProjects(userProjects);
+        } catch (error) {
+          console.error("Error fetching projects:", error);
+        } finally {
+          setLoading(false);
+        }
       }
     }
+
     fetchProjects();
   }, [user]);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="min-h-screen">
       <DashboardHeader />
 
-      <main className="flex-1 space-y-8 p-8">
+      <main className="p-6 space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Student Dashboard</h1>
-            <p className="text-muted-foreground">
-              Manage your projects and track funding progress
-            </p>
+            <p className="text-gray-500">Manage your projects and funding</p>
           </div>
-
           <Link href="/projects/new">
-            <Button className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
               New Project
             </Button>
           </Link>
         </div>
 
-        <ProjectStats projects={projects} />
+        <StudentStats projects={projects} />
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          <Card>
-            <div className="p-6">
-              <h2 className="text-lg font-semibold">Your Projects</h2>
-              <div className="mt-4">
-                <ProjectsTable projects={projects} loading={loading} />
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-6">
-              <h2 className="text-lg font-semibold">Recent Donations</h2>
-              <div className="mt-4">
-                <RecentDonations
-                  projectIds={projects.map((p) => p.id)}
-                />
-              </div>
-            </div>
-          </Card>
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold">Your Projects</h2>
+          <ProjectsList projects={projects} />
         </div>
       </main>
     </div>

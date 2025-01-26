@@ -1,9 +1,14 @@
-import { Card } from "../ui/card";
+import { AdminStatsProps } from "@/types";
 import { StatsCard } from "../ui/dashboard/stats-card";
 import { DollarSign, FileText, TrendingUp, Users } from "lucide-react";
 
-interface AdminStatsProps {
-  stats: any;
+export interface AdminStatsProps {
+  stats: {
+    totalUsers: number;
+    activeProjects: number;
+    totalFunding: number;
+    growthRate: number;
+  } | null;
   loading: boolean;
 }
 

@@ -10,6 +10,7 @@ import { ProjectUpdates } from '@/components/projects/ProjectUpdates';
 import { FundingModal } from '@/components/projects/FundingModal';
 import { Project } from '@/types';
 import { toast } from 'sonner';
+import {ProjectsGridSkeleton as ProjectDetailsSkeleton} from '@/components/ProjectsGridSkeleton'
 
 export default function ProjectDetailsPage() {
   const params = useParams();

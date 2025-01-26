@@ -93,6 +93,7 @@ export default function EditProjectPage() {
       router.push('/dashboard/projects');
     } catch (error) {
       toast.error('Failed to update project');
+      console.log(error)
     } finally {
       setIsSubmitting(false);
     }

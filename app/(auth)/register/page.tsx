@@ -100,7 +100,7 @@ export default function RegisterPage() {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
       // Here you would also create the user profile with their role
       toast.success("Account created successfully!");
-      console.log(data)
+      console.log(data);
       router.push(
         data.role === "student" ? "/dashboard/student" : "/dashboard/sponsor",
       );
@@ -114,12 +114,18 @@ export default function RegisterPage() {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      toast.success("Account created successfully!");
-      router.push("/dashboard");
+      const { isNewUser, user } = await signInWithGoogle();
+
+      if (isNewUser) {
+        // Redirect to complete profile for new users
+        router.push(`/complete-profile?uid=${user.uid}`);
+      } else {
+        toast.success("Welcome back!");
+        router.push("/dashboard");
+      }
     } catch (error) {
       toast.error("Could not sign in with Google");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

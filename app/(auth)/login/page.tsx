@@ -63,6 +63,7 @@ export default function LoginPage() {
       handleRedirect(role);
     } catch (error) {
       toast.error("Invalid credentials");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -72,14 +73,17 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       const { role, isNewUser, user } = await signInWithGoogle();
-      console.log(role, isNewUser, user);
+
       if (isNewUser) {
+        // Redirect to complete profile for new users
         router.push(`/complete-profile?uid=${user.uid}`);
       } else if (role) {
+        // Existing user with role
         toast.success("Welcome back!");
         handleRedirect(role);
       }
     } catch (error) {
+      console.error(error);
       toast.error("Could not sign in with Google");
     } finally {
       setIsLoading(false);

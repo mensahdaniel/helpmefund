@@ -53,20 +53,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const additionalInfo = getAdditionalUserInfo(userCredential);
     const isNewUser = additionalInfo?.isNewUser || false;
 
+    // Check if admin
     if (ADMIN_EMAILS.includes(userCredential.user.email!)) {
-      if (isNewUser) {
-        await createUserProfile(userCredential.user.uid, {
-          email: userCredential.user.email!,
-          name: userCredential.user.displayName ||
-            userCredential.user.email!.split("@")[0],
-          role: "admin",
-        });
-      }
+      await createUserProfile(userCredential.user.uid, {
+        email: userCredential.user.email!,
+        name: userCredential.user.displayName ||
+          userCredential.user.email!.split("@")[0],
+        role: "admin",
+      });
       return { role: "admin", isNewUser: false, user: userCredential.user };
     }
 
-    const role = await getUserRole(userCredential.user.uid);
-    return { role, isNewUser, user: userCredential.user };
+    // Check if existing user
+    const userRole = await getUserRole(userCredential.user.uid);
+
+    if (!userRole) {
+      // This is a new user, don't create profile yet
+      return {
+        role: null,
+        isNewUser: true,
+        user: userCredential.user,
+      };
+    }
+
+    return {
+      role: userRole,
+      isNewUser: false,
+      user: userCredential.user,
+    };
   };
 
   // Logout

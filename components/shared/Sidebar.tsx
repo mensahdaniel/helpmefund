@@ -24,8 +24,16 @@ const studentLinks = [
 
 const sponsorLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/investments", label: "My Investments", icon: PieChart },
-  { href: "/dashboard/discover", label: "Discover Projects", icon: Activity },
+  {
+    href: "/dashboard/sponsor/investments",
+    label: "My Investments",
+    icon: PieChart,
+  },
+  {
+    href: "/dashboard/sponsor/discover",
+    label: "Discover Projects",
+    icon: Activity,
+  },
 ];
 
 const adminLinks = [
@@ -90,10 +98,12 @@ export function DashboardSidebar() {
         {/* Main Navigation */}
         <nav className="flex-1 space-y-1 p-4">
           <div className="space-y-1">
-            {navigationLinks.map((link) => <NavLink
-              key={link.href}
-              {...link}
-            />)}
+            {navigationLinks.map((link) => (
+              <NavLink
+                key={link.href}
+                {...link}
+              />
+            ))}
           </div>
         </nav>
 

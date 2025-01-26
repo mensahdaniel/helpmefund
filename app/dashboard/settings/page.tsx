@@ -50,6 +50,7 @@ export default function SettingsPage() {
       toast.success("Profile updated successfully");
     } catch (error) {
       toast.error("Failed to update profile");
+      console.log(error)
     } finally {
       setIsUpdating(false);
     }

@@ -47,6 +47,7 @@ export default function ProjectDetailsPage() {
 
         setProject(projectData);
       } catch (error) {
+        console.log(error)
         toast.error('Failed to load project');
         router.push('/dashboard/projects');
       } finally {
@@ -229,8 +230,8 @@ export default function ProjectDetailsPage() {
                         Pending Approval
                       </h4>
                       <p className="mt-1 text-sm text-yellow-700">
-                        Your project is currently under review. We'll notify you
-                        once it's approved.
+                        Your project is currently under review. We&apos;ll notify you
+                        once it&apos;s approved.
                       </p>
                     </div>
                   </div>

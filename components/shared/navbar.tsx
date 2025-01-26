@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "../ui/button";
-import { LogOut, Menu, Plus, Search, User } from "lucide-react";
+import { LogOut, Menu, Plus, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

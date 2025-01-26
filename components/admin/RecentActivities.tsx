@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatRelativeDate } from "@/lib/utils";
 import { getRecentActivities } from "@/lib/firebase/admin";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-
 
 function RecentActivitiesSkeleton() {
   return (
@@ -42,3 +40,17 @@ export function RecentActivities() {
   if (loading) return <RecentActivitiesSkeleton />;
   if (error) return <div className="text-red-500">{error}</div>;
   if (activities.length === 0) return <div>No recent activities</div>;
+
+  return (
+    <div className="space-y-4">
+      {activities.map((activity) => (
+        <div key={activity.id} className="rounded-lg border p-4">
+          <p className="text-sm text-text-dark">{activity.description}</p>
+          <p className="mt-1 text-xs text-text-light">
+            {formatRelativeDate(activity.createdAt)}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}

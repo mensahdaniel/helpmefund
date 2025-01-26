@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-background py-20">

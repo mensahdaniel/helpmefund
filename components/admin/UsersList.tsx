@@ -17,7 +17,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LoadingSpinner } from "../ui/loading-spinner";
 import { User } from "@/types";
 
 function UsersTableSkeleton() {

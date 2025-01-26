@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createUserProfile } from "@/lib/firebase/auth";
+import { createNotification } from "@/lib/firebase/notifications"; // Add this import
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { auth } from "@/lib/firebase/config";
@@ -28,11 +29,24 @@ export default function CompleteProfilePage() {
         name: auth.currentUser.displayName ||
           auth.currentUser.email!.split("@")[0],
       });
+
+      // Create welcome notification
+      await createNotification({
+        userId: uid,
+        type: "project_update",
+        title: "Welcome to HelpMeFund!",
+        message: `Your account has been created as a ${role}. Get started by ${
+          role === "student"
+            ? "creating your first project"
+            : "browsing projects"
+        }.`,
+      });
+
       toast.success("Profile completed!");
       router.push(`/dashboard/${role}`);
     } catch (error) {
-      toast.error("Could not complete profile");
       console.error(error);
+      toast.error("Could not complete profile");
     } finally {
       setIsLoading(false);
     }

@@ -7,7 +7,6 @@ import {
   getPendingProjects,
   rejectProject,
 } from "@/lib/firebase/admin";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 function PendingProjectsSkeleton() {
   return (

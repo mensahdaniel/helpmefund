@@ -37,6 +37,7 @@ export function FundingModal({
       router.refresh();
     } catch (error) {
       toast.error("Failed to process funding");
+      console.log(error);
     } finally {
       setLoading(false);
     }

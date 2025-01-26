@@ -57,3 +57,35 @@ export interface User {
   role: "student" | "sponsor" | "admin";
   createdAt: Date;
 }
+
+export interface Donation {
+  id: string;
+  amount: number;
+  projectId: string;
+  createdAt: Date;
+  userId: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type:
+    | "project_update"
+    | "funding_received"
+    | "project_approved"
+    | "project_rejected"
+    | "account_created"; // Add this new type
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+  data?: any;
+}
+
+export interface Investment {
+  id: string;
+  sponsorId: string;
+  projectId: string;
+  amount: number;
+  createdAt: Date;
+}

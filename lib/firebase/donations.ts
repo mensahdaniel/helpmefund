@@ -7,8 +7,9 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./config";
+import { Donation } from "@/types";
 
-export async function getDonations(projectIds: string[]) {
+export async function getDonations(projectIds: string[]): Promise<Donation[]> {
   try {
     if (projectIds.length === 0) return [];
 

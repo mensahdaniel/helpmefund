@@ -12,8 +12,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db } from "./config";
-import { Project, ProjectStatus } from "@/types";
+import { auth, db } from "./config";
+import { Activity, Project, ProjectStatus, User } from "@/types";
 
 // Get admin statistics
 export async function getAdminStats() {
@@ -181,7 +181,7 @@ export async function rejectProject(projectId: string) {
 }
 
 // Get recent activities
-export async function getRecentActivities() {
+export async function getRecentActivities(): Promise<Activity[]> {
   try {
     const activitiesRef = collection(db, "activities");
     const recentActivitiesQuery = query(
@@ -208,44 +208,8 @@ export async function getRecentActivities() {
   }
 }
 
-// Add activity
-export async function addActivity({
-  type,
-  projectId,
-  userId,
-  description,
-}: {
-  type: string;
-  projectId?: string;
-  userId?: string;
-  description: string;
-}) {
-  try {
-    // Check if user is authenticated
-    if (!auth.currentUser) {
-      throw new Error("User must be authenticated to add activity");
-    }
-
-    const activitiesRef = collection(db, "activities");
-
-    const activityData = {
-      type,
-      description,
-      createdAt: Timestamp.now(),
-      createdBy: auth.currentUser.uid, // Add the user who created the activity
-      ...(projectId && { projectId }),
-      ...(userId && { userId }),
-    };
-
-    await addDoc(activitiesRef, activityData);
-  } catch (error) {
-    console.error("Error adding activity:", error);
-    throw error;
-  }
-}
-
 // Get user management data
-export async function getUsers(role?: string) {
+export async function getUsers(role?: string): Promise<User[]> {
   try {
     const usersRef = collection(db, "users");
     const usersQuery = role

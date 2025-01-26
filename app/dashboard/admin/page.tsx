@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardHeader } from "@/components/shared/DashboardHeader";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { PendingProjects } from "@/components/admin/PendingProjects";
 import { RecentActivities } from "@/components/admin/RecentActivities";
@@ -11,9 +11,10 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { getAdminDashboardData } from "@/lib/firebase/admin";
+// import {AdminDash} from './AdminDashboard'
 
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
@@ -39,6 +40,7 @@ export default function AdminDashboard() {
             Monitor platform activity and manage users
           </p>
         </div>
+        {/* <AdminDash/> */}
 
         <AdminStats stats={data?.stats} loading={loading} />
 

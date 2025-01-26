@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { InvestmentStats } from "@/components/dashboard/sponsor/InvestmentStats";
-import { InvestedProjects } from "@/components/dashboard/sponsor/InvestedProjects";
-import { RecommendedProjects } from "@/components/dashboard/sponsor/RecommendedProjects";
-import { Card } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
 import { getSponsorInvestments } from "@/lib/firebase/investments";
+import { SponsorStats } from "@/components/dashboard/sponsor/SponsorStats";
+import { InvestmentsList } from "@/components/dashboard/sponsor/InvestmentsList";
+import { RecommendedProjects } from "@/components/dashboard/sponsor/RecommendedProjects";
+import { DashboardHeader } from "@/components/shared/DashboardHeader";
 
 export default function SponsorDashboard() {
   const { user } = useAuth();
@@ -17,49 +16,44 @@ export default function SponsorDashboard() {
   useEffect(() => {
     async function fetchInvestments() {
       if (user) {
-        const data = await getSponsorInvestments(user.uid);
-        setInvestments(data);
-        setLoading(false);
+        try {
+          const data = await getSponsorInvestments(user.uid);
+          setInvestments(data);
+        } catch (error) {
+          console.error("Error fetching investments:", error);
+        } finally {
+          setLoading(false);
+        }
       }
     }
+
     fetchInvestments();
   }, [user]);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="min-h-screen">
       <DashboardHeader />
 
-      <main className="flex-1 space-y-8 p-8">
+      <main className="p-6 space-y-8">
         <div>
           <h1 className="text-2xl font-bold">Sponsor Dashboard</h1>
-          <p className="text-muted-foreground">
-            Track your investments and discover promising projects
+          <p className="text-gray-500">
+            Track your investments and discover projects
           </p>
         </div>
 
-        <InvestmentStats investments={investments} />
+        <SponsorStats investments={investments} />
 
         <div className="grid gap-8 lg:grid-cols-2">
-          <Card>
-            <div className="p-6">
-              <h2 className="text-lg font-semibold">Your Investments</h2>
-              <div className="mt-4">
-                <InvestedProjects
-                  investments={investments}
-                  loading={loading}
-                />
-              </div>
-            </div>
-          </Card>
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Your Investments</h2>
+            <InvestmentsList investments={investments} />
+          </div>
 
-          <Card>
-            <div className="p-6">
-              <h2 className="text-lg font-semibold">Recommended Projects</h2>
-              <div className="mt-4">
-                <RecommendedProjects userId={user?.uid} />
-              </div>
-            </div>
-          </Card>
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Recommended Projects</h2>
+            <RecommendedProjects userId={user?.uid} />
+          </div>
         </div>
       </main>
     </div>

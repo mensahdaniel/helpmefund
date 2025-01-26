@@ -6,6 +6,8 @@ import {
   getDoc,
   getDocs,
   increment,
+  limit, // Add this
+  orderBy, // Add this
   query,
   Timestamp,
   updateDoc,
@@ -146,5 +148,56 @@ export async function getProjects(category?: string) {
   } catch (error) {
     console.error("Error fetching projects:", error);
     throw error;
+  }
+}
+
+export async function getRecommendedProjects(userId: string) {
+  if (!userId) return [];
+
+  try {
+    const projectsRef = collection(db, "projects");
+    const q = query(
+      projectsRef,
+      where("status", "==", "active"),
+      orderBy("createdAt", "desc"),
+      limit(3),
+    );
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate(),
+    }));
+  } catch (error) {
+    console.error("Error getting recommended projects:", error);
+    return [];
+  }
+}
+
+export async function getActiveProjects(): Promise<Project[]> {
+  try {
+    const projectsRef = collection(db, "projects");
+    const q = query(
+      projectsRef,
+      where("status", "==", "active"),
+      orderBy("createdAt", "desc"),
+    );
+
+    const querySnapshot = await getDocs(q);
+    const projects: Project[] = [];
+
+    querySnapshot.forEach((doc) => {
+      projects.push({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate(),
+      } as Project);
+    });
+
+    return projects;
+  } catch (error) {
+    console.error("Error fetching active projects:", error);
+    return [];
   }
 }
