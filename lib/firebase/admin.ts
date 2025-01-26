@@ -2,16 +2,18 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
+  serverTimestamp,
   Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "./config";
-import { Project } from "@/types";
+import { Project, ProjectStatus } from "@/types";
 
 // Get admin statistics
 export async function getAdminStats() {
@@ -59,6 +61,58 @@ export async function getAdminStats() {
   }
 }
 
+export async function getAllProjects() {
+  try {
+    const projectsRef = collection(db, "projects");
+    const projectsSnapshot = await getDocs(projectsRef);
+    const projects = [];
+
+    // Change 'doc' to 'docSnapshot' in the loop to avoid naming conflict
+    for (const docSnapshot of projectsSnapshot.docs) {
+      const projectData = docSnapshot.data();
+      // Get creator name using the imported 'doc' function
+      const creatorRef = doc(db, "users", projectData.createdBy);
+      const creatorDoc = await getDoc(creatorRef);
+      const creatorName = creatorDoc.data()?.name || "Unknown";
+
+      projects.push({
+        id: docSnapshot.id,
+        ...projectData,
+        creatorName,
+        createdAt: projectData.createdAt?.toDate(),
+      });
+    }
+
+    return projects;
+  } catch (error) {
+    console.error("Error fetching all projects:", error);
+    throw error;
+  }
+}
+
+export async function updateProjectStatus(
+  projectId: string,
+  status: ProjectStatus,
+) {
+  try {
+    const projectRef = doc(db, "projects", projectId);
+    await updateDoc(projectRef, {
+      status,
+      updatedAt: serverTimestamp(),
+    });
+
+    // Log activity without userId
+    await addActivity({
+      type: "project_status_updated",
+      projectId, // Include projectId
+      description: `Project status updated to ${status}`,
+    });
+  } catch (error) {
+    console.error("Error updating project status:", error);
+    throw error;
+  }
+}
+
 // Get pending projects
 export async function getPendingProjects(): Promise<Project[]> {
   try {
@@ -82,7 +136,7 @@ export async function getPendingProjects(): Promise<Project[]> {
     return pendingProjects;
   } catch (error) {
     console.error("Error fetching pending projects:", error);
-    throw error;
+    return [];
   }
 }
 
@@ -95,7 +149,6 @@ export async function approveProject(projectId: string) {
       approvedAt: Timestamp.now(),
     });
 
-    // Log activity
     await addActivity({
       type: "project_approved",
       projectId,
@@ -116,7 +169,6 @@ export async function rejectProject(projectId: string) {
       rejectedAt: Timestamp.now(),
     });
 
-    // Log activity
     await addActivity({
       type: "project_rejected",
       projectId,
@@ -145,14 +197,14 @@ export async function getRecentActivities() {
       activities.push({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt.toDate(),
+        createdAt: doc.data().createdAt?.toDate(),
       });
     });
 
     return activities;
   } catch (error) {
     console.error("Error fetching recent activities:", error);
-    throw error;
+    return [];
   }
 }
 
@@ -169,14 +221,23 @@ export async function addActivity({
   description: string;
 }) {
   try {
+    // Check if user is authenticated
+    if (!auth.currentUser) {
+      throw new Error("User must be authenticated to add activity");
+    }
+
     const activitiesRef = collection(db, "activities");
-    await addDoc(activitiesRef, {
+
+    const activityData = {
       type,
-      projectId,
-      userId,
       description,
       createdAt: Timestamp.now(),
-    });
+      createdBy: auth.currentUser.uid, // Add the user who created the activity
+      ...(projectId && { projectId }),
+      ...(userId && { userId }),
+    };
+
+    await addDoc(activitiesRef, activityData);
   } catch (error) {
     console.error("Error adding activity:", error);
     throw error;
@@ -218,10 +279,9 @@ export async function updateUserRole(userId: string, role: string) {
       updatedAt: Timestamp.now(),
     });
 
-    // Log activity
     await addActivity({
       type: "user_role_updated",
-      userId,
+      userId, // Include userId
       description: `User role updated to ${role}`,
     });
   } catch (error) {

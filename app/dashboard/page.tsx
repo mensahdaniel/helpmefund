@@ -15,13 +15,5 @@ export default function DashboardPage() {
     }
   }, [userRole, loading, router]);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   return null;
 }

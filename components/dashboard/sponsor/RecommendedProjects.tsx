@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { getRecommendedProjects } from "@/lib/firebase/projects";
-import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectCard, ProjectCardSkeleton } from "@/components/ProjectCard";
+
+export function RecommendedProjectsSkeleton() {
+  return (
+    <div className="space-y-4">
+      {[...Array(3)].map((_, i) => <ProjectCardSkeleton key={i} />)}
+    </div>
+  );
+}
 
 export function RecommendedProjects({ userId }) {
   const [projects, setProjects] = useState([]);
@@ -15,7 +23,7 @@ export function RecommendedProjects({ userId }) {
     fetchRecommended();
   }, [userId]);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <RecommendedProjectsSkeleton />;
 
   return (
     <div className="space-y-4">

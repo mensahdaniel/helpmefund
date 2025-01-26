@@ -9,6 +9,27 @@ import {
 } from "@/lib/firebase/admin";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
+function PendingProjectsSkeleton() {
+  return (
+    <div className="space-y-4">
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="rounded-lg border p-4">
+          <div className="flex justify-between">
+            <div className="space-y-2">
+              <div className="h-5 w-48 animate-pulse rounded bg-gray-200" />
+              <div className="h-4 w-96 animate-pulse rounded bg-gray-200" />
+            </div>
+            <div className="flex gap-2">
+              <div className="h-8 w-8 animate-pulse rounded bg-gray-200" />
+              <div className="h-8 w-8 animate-pulse rounded bg-gray-200" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function PendingProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +53,7 @@ export function PendingProjects() {
     setProjects(projects.filter((p) => p.id !== projectId));
   };
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <PendingProjectsSkeleton />;
 
   return (
     <div className="space-y-4">

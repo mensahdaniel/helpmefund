@@ -1,7 +1,15 @@
-import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectCard, ProjectCardSkeleton } from "@/components/ProjectCard";
+
+export function InvestedProjectsSkeleton() {
+  return (
+    <div className="space-y-4">
+      {[...Array(3)].map((_, i) => <ProjectCardSkeleton key={i} />)}
+    </div>
+  );
+}
 
 export function InvestedProjects({ investments, loading }) {
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <InvestedProjectsSkeleton />;
 
   return (
     <div className="space-y-4">

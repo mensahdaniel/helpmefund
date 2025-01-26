@@ -7,16 +7,28 @@ interface AdminStatsProps {
   loading: boolean;
 }
 
+export function AdminStatsSkeleton() {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="rounded-lg border border-border bg-white p-6">
+          <div className="flex items-center justify-between">
+            <div className="h-4 w-24 animate-pulse rounded bg-gray-200" />
+            <div className="h-5 w-5 animate-pulse rounded-full bg-gray-200" />
+          </div>
+          <div className="mt-2 h-8 w-20 animate-pulse rounded bg-gray-200" />
+          <div className="mt-2 flex items-center gap-2">
+            <div className="h-4 w-4 animate-pulse rounded bg-gray-200" />
+            <div className="h-4 w-16 animate-pulse rounded bg-gray-200" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function AdminStats({ stats, loading }: AdminStatsProps) {
-  if (loading) {
-    return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i} className="h-32 animate-pulse" />
-        ))}
-      </div>
-    );
-  }
+  if (loading) return <AdminStatsSkeleton />;
 
   const statsData = [
     {

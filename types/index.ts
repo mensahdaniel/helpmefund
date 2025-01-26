@@ -6,6 +6,7 @@ export interface Project {
   fundingGoal: number;
   currentFunding: number;
   createdBy: string;
+  creatorName?: string;
   createdAt: Date;
   status: ProjectStatus;
   images: string[];
@@ -20,11 +21,11 @@ export type ProjectCategory =
   | "Environment";
 
 export type ProjectStatus =
-  | "draft"
   | "pending"
   | "active"
-  | "funded"
-  | "completed";
+  | "rejected"
+  | "completed"
+  | "funded";
 
 export interface ProjectUpdate {
   id: string;

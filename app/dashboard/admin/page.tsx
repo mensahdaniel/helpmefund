@@ -5,7 +5,14 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { PendingProjects } from "@/components/admin/PendingProjects";
 import { RecentActivities } from "@/components/admin/RecentActivities";
-import { Card } from "@/components/ui/card";
+import { UsersList } from "@/components/admin/UsersList";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { getAdminDashboardData } from "@/lib/firebase/admin";
 
 export default function AdminDashboard() {
@@ -34,6 +41,18 @@ export default function AdminDashboard() {
         </div>
 
         <AdminStats stats={data?.stats} loading={loading} />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Users Management</CardTitle>
+            <CardDescription>
+              Manage platform users and their roles
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <UsersList />
+          </CardContent>
+        </Card>
 
         <div className="grid gap-8 lg:grid-cols-2">
           <Card>

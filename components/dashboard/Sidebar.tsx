@@ -29,9 +29,9 @@ const sponsorLinks = [
 ];
 
 const adminLinks = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/projects", label: "Projects", icon: FolderOpen },
-  { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/admin/projects", label: "Projects", icon: FolderOpen },
+  { href: "/dashboard/admin/users", label: "Users", icon: Users },
 ];
 
 // Common links that appear at the bottom for all users

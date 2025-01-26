@@ -30,14 +30,6 @@ export default function DashboardLayout({
     }
   }, [user, userRole, loading, router, pathname]);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   if (!user || !userRole) {
     return null;
   }
