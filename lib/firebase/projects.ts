@@ -14,7 +14,33 @@ import {
 import { db } from "./config";
 import { Project } from "@/types";
 
-// Add this function
+// Get User Project function
+export async function getUserProjects(userId: string): Promise<Project[]> {
+  try {
+    const projectsRef = collection(db, "projects");
+    const userProjectsQuery = query(
+      projectsRef,
+      where("createdBy", "==", userId),
+    );
+
+    const querySnapshot = await getDocs(userProjectsQuery);
+    const userProjects: Project[] = [];
+
+    querySnapshot.forEach((doc) => {
+      userProjects.push({
+        id: doc.id,
+        ...doc.data(),
+      } as Project);
+    });
+
+    return userProjects;
+  } catch (error) {
+    console.error("Error fetching user projects:", error);
+    throw error;
+  }
+}
+
+// Create project function
 export async function createProject(projectData: Partial<Project>) {
   try {
     const projectsRef = collection(db, "projects");
