@@ -17,12 +17,56 @@ import { z } from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 
+// First, create the RoleSelector component inline (or in a separate file)
+function RoleSelector({
+  selectedRole,
+  onChange,
+}: {
+  selectedRole: "student" | "sponsor";
+  onChange: (role: "student" | "sponsor") => void;
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      <button
+        type="button"
+        onClick={() => onChange("student")}
+        className={`p-4 rounded-lg border-2 text-center transition-all ${
+          selectedRole === "student"
+            ? "border-primary bg-primary/10"
+            : "border-border hover:border-primary/50"
+        }`}
+      >
+        <h3 className="font-medium">Student</h3>
+        <p className="text-sm text-muted-foreground">
+          Create and manage projects
+        </p>
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onChange("sponsor")}
+        className={`p-4 rounded-lg border-2 text-center transition-all ${
+          selectedRole === "sponsor"
+            ? "border-primary bg-primary/10"
+            : "border-border hover:border-primary/50"
+        }`}
+      >
+        <h3 className="font-medium">Sponsor</h3>
+        <p className="text-sm text-muted-foreground">
+          Fund student projects
+        </p>
+      </button>
+    </div>
+  );
+}
+
 const registerSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
+    role: z.enum(["student", "sponsor"]),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -38,17 +82,28 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    watch, // Add this
+    setValue, // Add this
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      role: "student", // Set default role
+    },
   });
+
+  const selectedRole = watch("role"); // Get the current role value
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
       await createUserWithEmailAndPassword(auth, data.email, data.password);
+      // Here you would also create the user profile with their role
       toast.success("Account created successfully!");
-      router.push("/dashboard");
+      console.log(data)
+      router.push(
+        data.role === "student" ? "/dashboard/student" : "/dashboard/sponsor",
+      );
     } catch (error) {
       toast.error("Could not create account");
     } finally {
@@ -140,6 +195,21 @@ export default function RegisterPage() {
             <p className="text-sm text-red-500">
               {errors.confirmPassword.message}
             </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Account Type</label>
+          <input
+            type="hidden"
+            {...register("role")}
+          />
+          <RoleSelector
+            selectedRole={selectedRole}
+            onChange={(role) => setValue("role", role)}
+          />
+          {errors.role && (
+            <p className="text-sm text-red-500">{errors.role.message}</p>
           )}
         </div>
 

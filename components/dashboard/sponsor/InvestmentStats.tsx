@@ -1,34 +1,41 @@
-import { DollarSign, Target, TrendingUp, Users } from "lucide-react";
-import { StatCard } from "@/components/ui/stats-card";
+import { StatsCard } from "@/components/ui/stats-card";
+import { DollarSign, PieChart, TrendingUp, Users } from "lucide-react";
 
 export function InvestmentStats({ investments }) {
   const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
-  const projectsSupported =
-    new Set(investments.map((inv) => inv.projectId)).size;
-  const avgInvestment = totalInvested / (investments.length || 1);
+  const projectsFunded = new Set(investments.map((inv) => inv.projectId)).size;
+
+  const stats = [
+    {
+      title: "Total Invested",
+      value: `$${totalInvested.toLocaleString()}`,
+      icon: DollarSign,
+    },
+    {
+      title: "Projects Funded",
+      value: projectsFunded,
+      icon: PieChart,
+    },
+    {
+      title: "Success Rate",
+      value: "85%",
+      icon: TrendingUp,
+      trend: {
+        value: 5,
+        isPositive: true,
+        label: "vs last month",
+      },
+    },
+    {
+      title: "Impact Score",
+      value: "4.8/5",
+      icon: Users,
+    },
+  ];
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard
-        title="Total Invested"
-        value={`$${totalInvested.toLocaleString()}`}
-        icon={DollarSign}
-      />
-      <StatCard
-        title="Projects Supported"
-        value={projectsSupported}
-        icon={Target}
-      />
-      <StatCard
-        title="Total Investments"
-        value={investments.length}
-        icon={Users}
-      />
-      <StatCard
-        title="Average Investment"
-        value={`$${avgInvestment.toFixed(2)}`}
-        icon={TrendingUp}
-      />
+      {stats.map((stat) => <StatsCard key={stat.title} {...stat} />)}
     </div>
   );
 }

@@ -8,25 +8,20 @@ export function RecommendedProjects({ userId }) {
 
   useEffect(() => {
     async function fetchRecommended() {
-      const recommended = await getRecommendedProjects(userId);
-      setProjects(recommended);
+      const data = await getRecommendedProjects(userId);
+      setProjects(data);
       setLoading(false);
     }
     fetchRecommended();
   }, [userId]);
 
+  if (loading) return <LoadingSpinner />;
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-lg font-semibold text-text-dark">
-        Recommended Projects
-      </h2>
-      <div className="space-y-4">
-        {loading ? <ProjectsSkeleton /> : (
-          projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))
-        )}
-      </div>
+    <div className="space-y-4">
+      {projects.map((project) => (
+        <ProjectCard key={project.id} {...project} recommended />
+      ))}
     </div>
   );
 }

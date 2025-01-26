@@ -20,6 +20,16 @@
         --border: 220 13% 91%;
         --border-dark: 220 13% 27%;
     }
+
+    .sidebar-link-active {
+        @apply bg-primary text-white;
+        @apply transition-all duration-200;
+    }
+
+    .sidebar-link {
+        @apply transition-all duration-200;
+        @apply hover:bg-primary/10 hover:text-primary;
+    }
 }
 
 @layer components {

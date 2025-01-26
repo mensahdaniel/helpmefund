@@ -1,58 +1,68 @@
-interface ProjectCardProps {
-  title: string;
-  description: string;
-  category: string;
-  fundingGoal: number;
-  currentFunding: number;
-  image: string;
+import Image from "next/image";
+import Link from "next/link";
+import { Project } from "@/types";
+import { Card } from "./ui/card";
+import { Badge } from "./ui/badge";
+
+interface ProjectCardProps extends Project {
+  recommended?: boolean;
 }
 
 export function ProjectCard({
+  id,
   title,
   description,
   category,
   fundingGoal,
   currentFunding,
-  image,
+  images,
+  recommended,
 }: ProjectCardProps) {
   const progress = (currentFunding / fundingGoal) * 100;
 
   return (
-    <div className="card group hover:shadow-xl">
-      <div className="relative aspect-video overflow-hidden rounded-lg">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          className="object-cover transition-transform group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <span className="absolute bottom-2 left-2 rounded-full bg-primary px-3 py-1 text-xs text-white">
-          {category}
-        </span>
-      </div>
+    <Link href={`/projects/${id}`}>
+      <Card className="group overflow-hidden transition-all hover:shadow-lg">
+        <div className="relative aspect-video">
+          <Image
+            src={images[0]}
+            alt={title}
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+          />
+          {recommended && (
+            <Badge className="absolute right-2 top-2">
+              Recommended
+            </Badge>
+          )}
+        </div>
 
-      <div className="mt-4 space-y-2">
-        <h3 className="text-lg font-semibold text-text-dark">{title}</h3>
-        <p className="line-clamp-2 text-sm text-text-light">{description}</p>
+        <div className="p-4 space-y-4">
+          <div>
+            <h3 className="font-semibold">{title}</h3>
+            <p className="text-sm text-text-light line-clamp-2">
+              {description}
+            </p>
+          </div>
 
-        <div className="space-y-1">
-          <div className="flex justify-between text-sm">
-            <span>Progress</span>
-            <span className="font-medium">{progress.toFixed(0)}%</span>
-          </div>
-          <div className="h-2 rounded-full bg-border">
-            <div
-              className="h-full rounded-full bg-primary transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-sm text-text-light">
-            <span>${currentFunding.toLocaleString()}</span>
-            <span>of ${fundingGoal.toLocaleString()}</span>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-text-light">Progress</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <div className="h-2 rounded-full bg-gray-100">
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-text-light">Raised</span>
+              <span>${currentFunding.toLocaleString()}</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Card>
+    </Link>
   );
 }

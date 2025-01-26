@@ -16,6 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
+import { getUserRole } from "@/lib/firebase/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -27,6 +29,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { signIn, signInWithGoogle } = useAuth();
 
   const {
     register,
@@ -36,12 +39,28 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  const handleRedirect = (role: string) => {
+    switch (role) {
+      case "student":
+        router.push("/dashboard/student");
+        break;
+      case "sponsor":
+        router.push("/dashboard/sponsor");
+        break;
+      case "admin":
+        router.push("/dashboard/admin");
+        break;
+      default:
+        router.push("/dashboard");
+    }
+  };
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+      const { role } = await signIn(data.email, data.password);
       toast.success("Welcome back!");
-      router.push("/dashboard");
+      handleRedirect(role);
     } catch (error) {
       toast.error("Invalid credentials");
     } finally {
@@ -52,10 +71,14 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      toast.success("Welcome back!");
-      router.push("/dashboard");
+      const { role, isNewUser, user } = await signInWithGoogle();
+      console.log(role, isNewUser, user);
+      if (isNewUser) {
+        router.push(`/complete-profile?uid=${user.uid}`);
+      } else if (role) {
+        toast.success("Welcome back!");
+        handleRedirect(role);
+      }
     } catch (error) {
       toast.error("Could not sign in with Google");
     } finally {

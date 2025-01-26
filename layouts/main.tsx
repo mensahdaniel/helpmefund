@@ -1,6 +1,5 @@
 "use client";
 import { Navbar } from "@/components/shared/navbar";
-
 import { usePathname } from "next/navigation";
 
 const shouldHideNavbar = (pathname: string) => {
