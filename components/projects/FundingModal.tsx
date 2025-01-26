@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Dialog } from "@headlessui/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription, // Add this
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Project } from "@/types";
 import { toast } from "sonner";
 
@@ -36,63 +42,62 @@ export function FundingModal({
       onClose();
       router.refresh();
     } catch (error) {
-      toast.error("Failed to process funding");
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to process funding");
+      } else {
+        toast.error("Failed to process funding");
+      }
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      className="fixed inset-0 z-50 overflow-y-auto"
-    >
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <Dialog.Overlay className="fixed inset-0 bg-black/30" />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Fund this Project</DialogTitle>
+          <DialogDescription>
+            Enter the amount you would like to contribute to this project.
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
-          <Dialog.Title className="text-lg font-bold text-text-dark">
-            Fund this Project
-          </Dialog.Title>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-text-dark">
+              Amount ($)
+            </label>
+            <Input
+              type="number"
+              min="1"
+              step="1"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Enter amount"
+              className="input-field"
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-text-dark">
-                Amount ($)
-              </label>
-              <Input
-                type="number"
-                min="1"
-                step="1"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Enter amount"
-                className="input-field"
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="flex-1"
-                disabled={loading || !amount}
-              >
-                {loading ? "Processing..." : "Confirm"}
-              </Button>
-            </div>
-          </form>
-        </div>
-      </div>
+          <div className="flex gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="flex-1"
+              disabled={loading || !amount}
+            >
+              {loading ? "Processing..." : "Confirm"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

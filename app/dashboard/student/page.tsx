@@ -42,7 +42,7 @@ export default function StudentDashboard() {
             <h1 className="text-2xl font-bold">Student Dashboard</h1>
             <p className="text-gray-500">Manage your projects and funding</p>
           </div>
-          <Link href="/projects/new">
+          <Link href="/dashboard/student/projects/new">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               New Project

@@ -1,5 +1,5 @@
 import { DashboardGuard } from "@/components/shared/DashboardGuard";
-import { DashboardSidebar } from "@/components/dashboard/Sidebar";
+import { DashboardSidebar } from "@/components/shared/Sidebar";
 
 export default function StudentDashboardLayout({
   children,

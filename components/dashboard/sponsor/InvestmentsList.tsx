@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import { InvestmentsListSkeleton } from "./InvestmentsListSkeleton";
 
 interface InvestmentsListProps {
   investments: Investment[];
@@ -40,7 +41,12 @@ export function InvestmentsList(
   });
 
   const filteredInvestments = sortedInvestments.filter((investment) =>
-    investment.projectTitle.toLowerCase().includes(searchQuery.toLowerCase())
+    // Add null check for projectTitle
+    investment.projectTitle
+      ? investment.projectTitle.toLowerCase().includes(
+        searchQuery.toLowerCase(),
+      )
+      : true
   );
 
   return (
@@ -74,16 +80,20 @@ export function InvestmentsList(
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="relative h-16 w-16 overflow-hidden rounded-lg">
-                  <Image
-                    src={investment.projectImage}
-                    alt={investment.projectTitle}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+                {investment.projectImage && (
+                  <div className="relative h-16 w-16 overflow-hidden rounded-lg">
+                    <Image
+                      src={investment.projectImage}
+                      alt={investment.projectTitle || "Project"}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
                 <div>
-                  <h3 className="font-medium">{investment.projectTitle}</h3>
+                  <h3 className="font-medium">
+                    {investment.projectTitle || "Unnamed Project"}
+                  </h3>
                   <p className="text-sm text-muted-foreground">
                     ${investment.amount.toLocaleString()}
                   </p>

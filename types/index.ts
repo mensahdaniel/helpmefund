@@ -88,4 +88,8 @@ export interface Investment {
   projectId: string;
   amount: number;
   createdAt: Date;
+  // Add these properties
+  projectTitle?: string;
+  projectImage?: string;
+  projectDescription?: string;
 }

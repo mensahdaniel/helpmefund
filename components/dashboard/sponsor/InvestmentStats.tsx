@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Investment } from "@/types";
-import { StatsCard } from "@/components/ui/stats-card";
+import { StatCard as StatsCard } from "@/components/ui/stats-card";
 import { BarChart, DollarSign, PieChart, TrendingUp } from "lucide-react";
 
 interface InvestmentStatsProps {

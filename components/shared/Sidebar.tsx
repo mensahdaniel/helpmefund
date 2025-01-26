@@ -17,13 +17,21 @@ import {
 
 // Define navigation items based on user role
 const studentLinks = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/projects", label: "My Projects", icon: FolderOpen },
-  { href: "/projects/new", label: "Create Project", icon: Plus },
+  { href: "/dashboard/student", label: "Overview", icon: LayoutDashboard },
+  {
+    href: "/dashboard/student/projects",
+    label: "My Projects",
+    icon: FolderOpen,
+  },
+  {
+    href: "/dashboard/student/projects/new",
+    label: "Create Project",
+    icon: Plus,
+  },
 ];
 
 const sponsorLinks = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/sponsor", label: "Overview", icon: LayoutDashboard },
   {
     href: "/dashboard/sponsor/investments",
     label: "My Investments",

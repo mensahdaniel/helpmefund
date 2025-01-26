@@ -1,9 +1,8 @@
-"use client";
-
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, X } from "lucide-react";
 import Image from "next/image";
+import { uploadImage } from "@/lib/utils";
 
 interface ImageUploadProps {
   value: string[];
@@ -16,19 +15,21 @@ export function ImageUpload({
   onChange,
   maxImages = 5,
 }: ImageUploadProps) {
+  const [uploading, setUploading] = useState(false);
+
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      // Handle file upload to storage and get URLs
-      // This is a simplified version
-      acceptedFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            onChange([...value, e.target.result as string]);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
+    async (acceptedFiles: File[]) => {
+      try {
+        setUploading(true);
+        const uploadPromises = acceptedFiles.map(uploadImage);
+        const uploadedUrls = await Promise.all(uploadPromises);
+        onChange([...value, ...uploadedUrls]);
+      } catch (error) {
+        console.error("Error uploading images:", error);
+        toast.error("Failed to upload images");
+      } finally {
+        setUploading(false);
+      }
     },
     [value, onChange],
   );
@@ -39,7 +40,7 @@ export function ImageUpload({
       "image/*": [".jpeg", ".jpg", ".png"],
     },
     maxFiles: maxImages - value.length,
-    disabled: value.length >= maxImages,
+    disabled: uploading || value.length >= maxImages,
   });
 
   const removeImage = (index: number) => {
@@ -78,10 +79,18 @@ export function ImageUpload({
           >
             <input {...getInputProps()} />
             <div className="text-center">
-              <Upload className="mx-auto h-6 w-6 text-text-light" />
-              <p className="mt-2 text-sm text-text-light">
-                Drop images here or click to upload
-              </p>
+              {uploading
+                ? (
+                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-primary border-t-transparent" />
+                )
+                : (
+                  <>
+                    <Upload className="mx-auto h-6 w-6 text-text-light" />
+                    <p className="mt-2 text-sm text-text-light">
+                      Drop images here or click to upload
+                    </p>
+                  </>
+                )}
             </div>
           </div>
         )}
