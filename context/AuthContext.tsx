@@ -1,17 +1,30 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
+import { createUserProfile } from "@/lib/firebase/auth";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  signUp: (email: string, password: string, name: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  signUp: async () => {},
+  signIn: async () => {},
+  logout: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -19,16 +32,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscrie = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
 
-    return () => unsubscrie();
+    return () => unsubscribe();
   }, []);
 
+  const signUp = async (email: string, password: string, name: string) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      await createUserProfile(userCredential.user.uid, {
+        name,
+        email,
+        role: "student",
+      });
+    } catch (error) {
+      console.error("Error signing up:", error);
+      throw error;
+    }
+  };
+
+  const signIn = async (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = async () => {
+    return signOut(auth);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, logout }}>
       {children}
     </AuthContext.Provider>
   );
