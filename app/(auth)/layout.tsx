@@ -21,7 +21,6 @@ export default function AuthLayout({
               Connect with sponsors who believe in student potential and bring
               your projects to life.
             </p>
-            {/* Add some decorative elements or illustrations here */}
           </div>
         </div>
       </div>

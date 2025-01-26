@@ -60,6 +60,23 @@ export async function createProject(projectData: Partial<Project>) {
   }
 }
 
+export async function updateProject(projectId: string, data: Partial<Project>) {
+  try {
+    const projectRef = doc(db, "projects", projectId);
+    await updateDoc(projectRef, {
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      fundingGoal: data.fundingGoal,
+      images: data.images,
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error("Error updating project:", error);
+    throw error;
+  }
+}
+
 export async function getProject(projectId: string) {
   try {
     const docRef = doc(db, "projects", projectId);

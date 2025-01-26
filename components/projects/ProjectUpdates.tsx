@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { ProjectUpdate } from "@/types";
-import { formatDate } from "@/lib/utils";
+import { formatRelativeDate } from "@/lib/utils"; // Updated import
 
 interface ProjectUpdatesProps {
   projectId: string;
@@ -38,7 +38,7 @@ export function ProjectUpdates({ projectId, updates }: ProjectUpdatesProps) {
           >
             <p className="text-text-light">{update.content}</p>
             <div className="mt-2 flex items-center gap-2 text-sm text-text-light">
-              <span>{formatDate(update.createdAt)}</span>
+              <span>{formatRelativeDate(update.createdAt)}</span>
             </div>
           </div>
         ))}

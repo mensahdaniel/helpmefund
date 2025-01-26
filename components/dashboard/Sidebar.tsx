@@ -8,43 +8,23 @@ import {
   FolderOpen,
   LayoutDashboard,
   LogOut,
-  PieChart,
   Plus,
   Settings,
-  Users,
 } from "lucide-react";
 
 const studentLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/projects", label: "My Projects", icon: FolderOpen },
   { href: "/projects/new", label: "Create Project", icon: Plus },
-];
-
-const sponsorLinks = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/investments", label: "My Investments", icon: PieChart },
-  { href: "/projects", label: "Browse Projects", icon: FolderOpen },
-];
-
-const adminLinks = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/projects", label: "Projects", icon: FolderOpen },
-  { href: "/admin/users", label: "Users", icon: Users },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const { user, userRole, logout } = useAuth();
-
-  const links = userRole === "admin"
-    ? adminLinks
-    : userRole === "sponsor"
-    ? sponsorLinks
-    : studentLinks;
+  const { user, logout } = useAuth();
 
   return (
-    <aside className="fixed left-0 top-0 z-30 h-screen w-64 border-r border-border bg-white/80 backdrop-blur-xl">
+    <aside className=" left-0 top-0 z-30 h-screen w-64 border-r border-border bg-white/80 backdrop-blur-xl">
       <div className="flex h-full flex-col">
         <div className="p-6">
           <Link href="/" className="text-xl font-bold text-primary">
@@ -53,7 +33,7 @@ export function DashboardSidebar() {
         </div>
 
         <nav className="flex-1 space-y-1 p-4">
-          {links.map((link) => {
+          {studentLinks.map((link) => {
             const Icon = link.icon;
             return (
               <Link

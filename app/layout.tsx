@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { Navbar } from "@/components/shared/navbar";
 import { AuthProvider } from "@/context/AuthContext";
+import { MainLayout } from "@/layouts/main";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   title: "HelpMeFund - Student Project Crowdfunding",
   description: "Connect students with sponsors for project funding",
 };
+
+// Add a function to check if the current path should hide the navbar
 
 export default function RootLayout({
   children,
@@ -21,10 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={geist.className}>
         <AuthProvider>
-          <Navbar />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </main>
+          <MainLayout>{children}</MainLayout>
           <Toaster position="top-center" />
         </AuthProvider>
       </body>

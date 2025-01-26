@@ -17,3 +17,19 @@ export async function createUserProfile(userId: string, userData: {
     throw error;
   }
 }
+
+export async function updateUserProfile(userId: string, data: {
+  displayName?: string;
+  notifications?: {
+    email: boolean;
+    push: boolean;
+  };
+}) {
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, data);
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    throw error;
+  }
+}

@@ -127,10 +127,12 @@ export function ProjectsTable({ projects, loading }: ProjectsTableProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                      <Link href={`/projects/${project.id}`}>View Project</Link>
+                      <Link href={`/dashboard/projects/${project.id}`}>
+                        View Project
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href={`/projects/${project.id}/edit`}>
+                      <Link href={`dashboard/projects/${project.id}/edit`}>
                         Edit Project
                       </Link>
                     </DropdownMenuItem>
