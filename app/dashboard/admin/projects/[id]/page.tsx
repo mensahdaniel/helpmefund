@@ -41,6 +41,7 @@ export default function AdminProjectDetailsPage() {
         setProject(projectData);
       } catch (error) {
         toast.error('Failed to load project');
+        console.error(error)
         router.push('/dashboard/admin/projects');
       } finally {
         setLoading(false);
@@ -60,6 +61,7 @@ export default function AdminProjectDetailsPage() {
       setProject({ ...project, status: newStatus });
       toast.success(`Project ${newStatus === 'active' ? 'approved' : 'rejected'}`);
     } catch (error) {
+      console.error(error);
       toast.error(`Failed to ${newStatus === 'active' ? 'approve' : 'reject'} project`);
     }
   };

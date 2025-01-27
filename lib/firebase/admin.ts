@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -12,8 +11,9 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { auth, db } from "./config";
+import { db } from "./config";
 import { Activity, Project, ProjectStatus, User } from "@/types";
+import { addActivity } from "./activities";
 
 // Get admin statistics
 export async function getAdminStats() {
@@ -191,6 +191,7 @@ export async function getRecentActivities(): Promise<Activity[]> {
     );
 
     const querySnapshot = await getDocs(recentActivitiesQuery);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const activities: any[] = [];
 
     querySnapshot.forEach((doc) => {
@@ -217,6 +218,7 @@ export async function getUsers(role?: string): Promise<User[]> {
       : query(usersRef);
 
     const querySnapshot = await getDocs(usersQuery);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const users: any[] = [];
 
     querySnapshot.forEach((doc) => {

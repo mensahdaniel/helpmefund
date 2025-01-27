@@ -10,10 +10,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
 import { getProject, updateProject } from '@/lib/firebase/projects';
-import { Project } from '@/types';
+import { ProjectFormData } from '@/types';
 import { toast } from 'sonner';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
+
+
 
 const projectSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters'),
@@ -32,7 +35,6 @@ export default function EditProjectPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const [project, setProject] = useState<Project | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +60,6 @@ export default function EditProjectPage() {
           return;
         }
 
-        setProject(projectData);
         setImages(projectData.images || []);
         reset({
           title: projectData.title,
@@ -68,6 +69,7 @@ export default function EditProjectPage() {
         });
       } catch (error) {
         toast.error('Failed to load project');
+        console.error(error);
         router.push('/dashboard/projects');
       } finally {
         setIsLoading(false);
@@ -79,7 +81,7 @@ export default function EditProjectPage() {
     }
   }, [params.id, user, router, reset]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ProjectFormData) => {
     try {
       setIsSubmitting(true);
       const updatedData = {
@@ -93,7 +95,7 @@ export default function EditProjectPage() {
       router.push('/dashboard/projects');
     } catch (error) {
       toast.error('Failed to update project');
-      console.log(error)
+      console.error(error)
     } finally {
       setIsSubmitting(false);
     }

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import { createProject } from "@/lib/firebase/projects";
+import { ProjectFormData } from "@/types";
 
 const projectSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -38,7 +39,7 @@ export default function NewProjectPage() {
     resolver: zodResolver(projectSchema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ProjectFormData) => {
     try {
       setIsSubmitting(true);
       const projectData = {

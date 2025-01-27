@@ -30,7 +30,7 @@ export default function CompleteProfilePage() {
           auth.currentUser.email!.split("@")[0],
       });
 
-      // Create welcome notification
+      // Create welcome notification with read property
       await createNotification({
         userId: uid,
         type: "project_update",
@@ -40,6 +40,7 @@ export default function CompleteProfilePage() {
             ? "creating your first project"
             : "browsing projects"
         }.`,
+        read: false,
       });
 
       toast.success("Profile completed!");

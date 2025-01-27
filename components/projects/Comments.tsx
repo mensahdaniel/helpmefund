@@ -24,13 +24,13 @@ export function Comments({ projectId }: CommentsProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    async function loadComments() {
+      const projectComments = await getProjectComments(projectId);
+      setComments(projectComments);
+    }
+
     loadComments();
   }, [projectId]);
-
-  async function loadComments() {
-    const projectComments = await getProjectComments(projectId);
-    setComments(projectComments);
-  }
 
   async function handleSubmitComment(e: React.FormEvent) {
     e.preventDefault();
@@ -49,6 +49,7 @@ export function Comments({ projectId }: CommentsProps) {
       await loadComments();
       toast.success("Comment added successfully");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to add comment");
     } finally {
       setIsSubmitting(false);

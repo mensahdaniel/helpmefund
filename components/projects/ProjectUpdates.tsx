@@ -7,11 +7,11 @@ import { ProjectUpdate } from "@/types";
 import { formatRelativeDate } from "@/lib/utils"; // Updated import
 
 interface ProjectUpdatesProps {
-  projectId: string;
+  projectId?: string;
   updates: ProjectUpdate[];
 }
 
-export function ProjectUpdates({ projectId, updates }: ProjectUpdatesProps) {
+export function ProjectUpdates({ updates }: ProjectUpdatesProps) {
   const { user } = useAuth();
   const [showAll, setShowAll] = useState(false);
 

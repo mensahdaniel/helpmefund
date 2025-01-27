@@ -1,9 +1,9 @@
-'use client'
+"use client";
 import { useProjects } from "@/hooks/useProjects";
 import { ProjectCard } from "../ProjectCard";
 
 export function FeaturedProjects() {
-  const { projects, isLoading } = useProjects("all", { limit: 3 });
+  const { projects } = useProjects("all", { limit: 3 });
 
   return (
     <section className="py-20 bg-gray-50">

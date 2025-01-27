@@ -43,6 +43,7 @@ export default function UsersPage() {
         const data = await getUsers();
         setUsers(data);
       } catch (error) {
+        console.error(error);
         toast.error("Failed to load users");
       } finally {
         setLoading(false);
@@ -61,6 +62,7 @@ export default function UsersPage() {
       );
       toast.success("User role updated successfully");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to update user role");
     }
   };

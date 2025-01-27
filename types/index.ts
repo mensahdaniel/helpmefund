@@ -13,6 +13,14 @@ export interface Project {
   updates: ProjectUpdate[];
 }
 
+export interface ProjectFormData {
+  title: string;
+  description: string;
+  category: string;
+  fundingGoal: number;
+  images: string[];
+}
+
 export type ProjectCategory =
   | "Technology"
   | "Health"

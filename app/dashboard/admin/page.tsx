@@ -14,17 +14,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getAdminDashboardData } from "@/lib/firebase/admin";
+import { Activity, Project, User } from "@/types";
 // import {AdminDash} from './AdminDashboard'
 
+interface DashboardData {
+  stats: {
+    totalUsers: number;
+    activeProjects: number;
+    totalFunding: number;
+    growthRate: number;
+  };
+  pendingProjects: Project[];
+  recentActivities: Activity[];
+  users: User[];
+}
+
 export default function AdminDashboard() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const dashboardData = await getAdminDashboardData();
-      setData(dashboardData);
-      setLoading(false);
+      try {
+        const dashboardData = await getAdminDashboardData();
+        setData(dashboardData as DashboardData);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, []);

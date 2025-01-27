@@ -26,6 +26,7 @@ export default function ProjectDetailsPage() {
         const projectData = await getProject(params.id as string);
         setProject(projectData);
       } catch (error) {
+        console.error('Error fetching project:', error);
         toast.error('Failed to load project');
         router.push('/projects');
       } finally {

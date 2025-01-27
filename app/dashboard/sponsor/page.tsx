@@ -11,7 +11,7 @@ import { DashboardHeader } from "@/components/shared/DashboardHeader";
 export default function SponsorDashboard() {
   const { user } = useAuth();
   const [investments, setInvestments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [_, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchInvestments() {
@@ -22,7 +22,7 @@ export default function SponsorDashboard() {
         } catch (error) {
           console.error("Error fetching investments:", error);
         } finally {
-          setLoading(false);
+          console.log("done");
         }
       }
     }

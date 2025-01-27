@@ -91,6 +91,7 @@ export function ProjectsList({ projects, loading = false }: ProjectsListProps) {
       toast.success("Project deleted successfully");
       setDeleteConfirm(null);
     } catch (error) {
+      console.error(error);
       toast.error("Failed to delete project");
     } finally {
       setIsDeleting(null);

@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase/config";
+// import {
+//   GoogleAuthProvider,
+//   signInWithEmailAndPassword,
+//   signInWithPopup,
+// } from "firebase/auth";
+// import { auth } from "@/lib/firebase/config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -17,7 +17,7 @@ import { z } from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
-import { getUserRole } from "@/lib/firebase/auth";
+// import { getUserRole } from "@/lib/firebase/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -163,7 +163,7 @@ export default function LoginPage() {
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link
           href="/register"
           className="underline underline-offset-4 hover:text-primary"

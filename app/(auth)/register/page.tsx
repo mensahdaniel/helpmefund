@@ -3,11 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext"; //
 
 // First, create the RoleSelector component inline (or in a separate file)
 function RoleSelector({
@@ -78,6 +75,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { signInWithGoogle } = useAuth(); // Add this line
 
   const {
     register,
@@ -105,6 +103,7 @@ export default function RegisterPage() {
         data.role === "student" ? "/dashboard/student" : "/dashboard/sponsor",
       );
     } catch (error) {
+      console.error(error);
       toast.error("Could not create account");
     } finally {
       setIsLoading(false);
@@ -114,18 +113,18 @@ export default function RegisterPage() {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const { isNewUser, user } = await signInWithGoogle();
+      const { role, isNewUser, user } = await signInWithGoogle(); // Updated to match AuthContext return type
 
       if (isNewUser) {
         // Redirect to complete profile for new users
         router.push(`/complete-profile?uid=${user.uid}`);
-      } else {
+      } else if (role) {
         toast.success("Welcome back!");
-        router.push("/dashboard");
+        router.push(`/dashboard/${role}`);
       }
     } catch (error) {
       toast.error("Could not sign in with Google");
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

@@ -37,6 +37,7 @@ export default function AdminProjectsPage() {
         const data = await getAllProjects();
         setProjects(data);
       } catch (error) {
+        console.error(error);
         toast.error("Failed to load projects");
       } finally {
         setLoading(false);
@@ -58,6 +59,7 @@ export default function AdminProjectsPage() {
       );
       toast.success("Project status updated");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to update project status");
     }
   };

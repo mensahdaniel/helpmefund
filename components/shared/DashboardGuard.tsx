@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
+type UserRole = "student" | "sponsor" | "admin";
+
 interface DashboardGuardProps {
   children: React.ReactNode;
-  allowedRoles: ("student" | "sponsor" | "admin")[];
+  allowedRoles: UserRole[];
 }
 
 export function DashboardGuard({
@@ -24,7 +26,7 @@ export function DashboardGuard({
         return;
       }
 
-      if (!userRole || !allowedRoles.includes(userRole as any)) {
+      if (!userRole || !allowedRoles.includes(userRole as UserRole)) {
         if (userRole) {
           router.push(`/dashboard/${userRole}`);
         } else {
@@ -42,7 +44,7 @@ export function DashboardGuard({
     );
   }
 
-  if (!user || !userRole || !allowedRoles.includes(userRole as any)) {
+  if (!user || !userRole || !allowedRoles.includes(userRole as UserRole)) {
     return null;
   }
 

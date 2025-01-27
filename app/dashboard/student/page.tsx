@@ -8,12 +8,13 @@ import { ProjectsList } from "@/components/dashboard/student/ProjectsList";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+// import { userProjects } from "@/hooks/useProjects";
 import { DashboardHeader } from "@/components/shared/DashboardHeader";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -24,7 +25,7 @@ export default function StudentDashboard() {
         } catch (error) {
           console.error("Error fetching projects:", error);
         } finally {
-          setLoading(false);
+          console.log("done");
         }
       }
     }

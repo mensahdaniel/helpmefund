@@ -27,6 +27,7 @@ export default function ProjectDetailsPage() {
         setProject(projectData);
       } catch (error) {
         toast.error('Failed to load project');
+        console.error(error)
         router.push('/projects');
       } finally {
         setLoading(false);
