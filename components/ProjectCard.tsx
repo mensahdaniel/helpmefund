@@ -30,6 +30,9 @@ interface ProjectCardProps extends Project {
 }
 
 export function ProjectCard({
+  id,
+  title,
+  description,
   fundingGoal,
   currentFunding,
   images,

@@ -14,7 +14,7 @@ export function useProjects(category: string = "all") {
         setIsLoading(true);
         setError(null);
 
-        let projectsRef = collection(db, "projects");
+        const projectsRef = collection(db, "projects");
         let projectsQuery = projectsRef;
 
         if (category && category !== "all") {

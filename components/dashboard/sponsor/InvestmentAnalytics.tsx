@@ -63,10 +63,9 @@ export function InvestmentAnalytics({ investments }: InvestmentAnalyticsProps) {
                 outerRadius={100}
                 dataKey="value"
                 label={({ name, value }) =>
-                  `${name}: $${value.toLocaleString()}`
-                }
+                  `${name}: $${value.toLocaleString()}`}
               >
-                {categoryData.map((entry, index) => (
+                {categoryData.map((_entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

@@ -61,11 +61,11 @@ export async function getAdminStats() {
   }
 }
 
-export async function getAllProjects() {
+export async function getAllProjects(): Promise<Project[]> {
   try {
     const projectsRef = collection(db, "projects");
     const projectsSnapshot = await getDocs(projectsRef);
-    const projects = [];
+    const projects: Project[] = [];
 
     // Change 'doc' to 'docSnapshot' in the loop to avoid naming conflict
     for (const docSnapshot of projectsSnapshot.docs) {
@@ -77,9 +77,17 @@ export async function getAllProjects() {
 
       projects.push({
         id: docSnapshot.id,
-        ...projectData,
-        creatorName,
+        title: projectData.title,
+        description: projectData.description,
+        category: projectData.category,
+        fundingGoal: projectData.fundingGoal,
+        currentFunding: projectData.currentFunding,
+        createdBy: projectData.createdBy,
         createdAt: projectData.createdAt?.toDate(),
+        status: projectData.status,
+        images: projectData.images || [],
+        updates: projectData.updates || [],
+        creatorName,
       });
     }
 
@@ -191,8 +199,7 @@ export async function getRecentActivities(): Promise<Activity[]> {
     );
 
     const querySnapshot = await getDocs(recentActivitiesQuery);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const activities: any[] = [];
+    const activities: Activity[] = [];
 
     querySnapshot.forEach((doc) => {
       activities.push({
@@ -219,7 +226,7 @@ export async function getUsers(role?: string): Promise<User[]> {
 
     const querySnapshot = await getDocs(usersQuery);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const users: any[] = [];
+    const users: User[] = [];
 
     querySnapshot.forEach((doc) => {
       users.push({
@@ -237,7 +244,10 @@ export async function getUsers(role?: string): Promise<User[]> {
 }
 
 // Update user role
-export async function updateUserRole(userId: string, role: string) {
+export async function updateUserRole(
+  userId: string,
+  role: "student" | "sponsor" | "admin",
+) {
   try {
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
@@ -247,7 +257,7 @@ export async function updateUserRole(userId: string, role: string) {
 
     await addActivity({
       type: "user_role_updated",
-      userId, // Include userId
+      userId,
       description: `User role updated to ${role}`,
     });
   } catch (error) {

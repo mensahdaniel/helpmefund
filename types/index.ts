@@ -7,6 +7,7 @@ export interface Project {
   currentFunding: number;
   createdBy: string;
   creatorName?: string;
+  creatorEmail?: string;
   createdAt: Date;
   status: ProjectStatus;
   images: string[];
@@ -49,6 +50,18 @@ export interface AdminStats {
   growthRate: number;
 }
 
+interface DashboardStats {
+  totalUsers: number;
+  activeProjects: number;
+  totalFunding: number;
+  growthRate: number;
+}
+
+export interface AdminStatsProps {
+  stats: DashboardStats | null;
+  loading: boolean;
+}
+
 export interface Activity {
   id: string;
   type: string;
@@ -87,7 +100,7 @@ export interface Notification {
   message: string;
   read: boolean;
   createdAt: Date;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 export interface Investment {

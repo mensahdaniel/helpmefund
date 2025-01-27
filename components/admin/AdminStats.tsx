@@ -2,16 +2,6 @@ import { AdminStatsProps } from "@/types";
 import { StatsCard } from "../ui/dashboard/stats-card";
 import { DollarSign, FileText, TrendingUp, Users } from "lucide-react";
 
-export interface AdminStatsProps {
-  stats: {
-    totalUsers: number;
-    activeProjects: number;
-    totalFunding: number;
-    growthRate: number;
-  } | null;
-  loading: boolean;
-}
-
 export function AdminStatsSkeleton() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

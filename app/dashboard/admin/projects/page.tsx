@@ -26,7 +26,7 @@ import { AdminProjectStatusBadge } from "@/components/admin/AdminProjectStatusBa
 import { AdminProjectsTableSkeleton } from "@/components/admin/AdminProjectsTableSkeleton";
 
 export default function AdminProjectsPage() {
-  const router = useRouter(); // Add this
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");

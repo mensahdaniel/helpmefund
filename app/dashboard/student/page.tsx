@@ -10,10 +10,11 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 // import { userProjects } from "@/hooks/useProjects";
 import { DashboardHeader } from "@/components/shared/DashboardHeader";
+import { Project } from "@/types";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   // const [_loading, setLoading] = useState(true);
 
   useEffect(() => {

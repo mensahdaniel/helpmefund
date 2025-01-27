@@ -2,14 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import {
-  AdditionalUserInfo,
-  getAdditionalUserInfo,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   User,
-  UserCredential,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { createUserProfile, getUserRole } from "@/lib/firebase/auth";
@@ -50,8 +47,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
-    const additionalInfo = getAdditionalUserInfo(userCredential);
-    const isNewUser = additionalInfo?.isNewUser || false;
+    // const additionalInfo = getAdditionalUserInfo(userCredential);
+    // const isNewUser = additionalInfo?.isNewUser || false;
 
     // Check if admin
     if (ADMIN_EMAILS.includes(userCredential.user.email!)) {

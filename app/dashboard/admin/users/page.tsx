@@ -31,6 +31,8 @@ import { MoreVertical, Search, UserPlus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 
+type UserRole = "student" | "sponsor" | "admin";
+
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +54,7 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  const handleRoleChange = async (userId: string, newRole: string) => {
+  const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
       await updateUserRole(userId, newRole);
       setUsers(

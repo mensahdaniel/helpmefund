@@ -38,7 +38,7 @@ export default function AdminProjectDetailsPage() {
     async function fetchProject() {
       try {
         const projectData = await getProject(params.id as string);
-        setProject(projectData);
+        setProject(projectData as Project);
       } catch (error) {
         toast.error('Failed to load project');
         console.error(error)

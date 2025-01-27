@@ -23,7 +23,7 @@ interface DashboardData {
     activeProjects: number;
     totalFunding: number;
     growthRate: number;
-  };
+  } | null; // Make stats nullable
   pendingProjects: Project[];
   recentActivities: Activity[];
   users: User[];
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
         </div>
         {/* <AdminDash/> */}
 
-        <AdminStats stats={data?.stats} loading={loading} />
+        <AdminStats stats={data?.stats || null} loading={loading} />
 
         <Card>
           <CardHeader>

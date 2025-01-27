@@ -84,7 +84,7 @@ export async function updateProject(projectId: string, data: Partial<Project>) {
   }
 }
 
-export async function getProject(projectId: string) {
+export async function getProject(projectId: string): Promise<Project> {
   try {
     const docRef = doc(db, "projects", projectId);
     const docSnap = await getDoc(docRef);
@@ -93,10 +93,22 @@ export async function getProject(projectId: string) {
       throw new Error("Project not found");
     }
 
+    const data = docSnap.data();
     return {
       id: docSnap.id,
-      ...docSnap.data(),
-    };
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      fundingGoal: data.fundingGoal,
+      currentFunding: data.currentFunding,
+      createdBy: data.createdBy,
+      creatorName: data.creatorName,
+      createdAt: data.createdAt.toDate(),
+      status: data.status,
+      images: data.images || [],
+      updates: data.updates || [],
+      creatorEmail: data.creatorEmail, // if this is needed
+    } as Project;
   } catch (error) {
     console.error("Error fetching project:", error);
     throw error;
