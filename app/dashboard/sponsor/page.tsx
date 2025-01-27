@@ -7,11 +7,12 @@ import { SponsorStats } from "@/components/dashboard/sponsor/SponsorStats";
 import { InvestmentsList } from "@/components/dashboard/sponsor/InvestmentsList";
 import { RecommendedProjects } from "@/components/dashboard/sponsor/RecommendedProjects";
 import { DashboardHeader } from "@/components/shared/DashboardHeader";
+import { Investment } from "@/types"; // Add this import
 
 export default function SponsorDashboard() {
   const { user } = useAuth();
-  const [investments, setInvestments] = useState([]);
-  // const [_, setLoading] = useState(true);
+  const [investments, setInvestments] = useState<Investment[]>([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     async function fetchInvestments() {
@@ -22,7 +23,7 @@ export default function SponsorDashboard() {
         } catch (error) {
           console.error("Error fetching investments:", error);
         } finally {
-          console.log("done");
+          setLoading(false); // Set loading to false when done
         }
       }
     }
@@ -47,7 +48,7 @@ export default function SponsorDashboard() {
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="space-y-6">
             <h2 className="text-xl font-semibold">Your Investments</h2>
-            <InvestmentsList investments={investments} />
+            <InvestmentsList investments={investments} loading={loading} />
           </div>
 
           <div className="space-y-6">

@@ -105,11 +105,11 @@ export interface Notification {
 
 export interface Investment {
   id: string;
-  sponsorId: string;
   projectId: string;
+  sponsorId: string;
   amount: number;
   createdAt: Date;
-  // Add these properties
+  status: string;
   projectTitle?: string;
   projectImage?: string;
   projectDescription?: string;

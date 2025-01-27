@@ -8,10 +8,11 @@ import { InvestmentsList } from "@/components/dashboard/sponsor/InvestmentsList"
 import { InvestmentStats } from "@/components/dashboard/sponsor/InvestmentStats";
 import { InvestmentAnalytics } from "@/components/dashboard/sponsor/InvestmentAnalytics";
 import { Card } from "@/components/ui/card";
+import { Investment } from "@/types"; // Add this import
 
 export default function InvestmentsPage() {
   const { user } = useAuth();
-  const [investments, setInvestments] = useState([]);
+  const [investments, setInvestments] = useState<Investment[]>([]); // Add type here
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

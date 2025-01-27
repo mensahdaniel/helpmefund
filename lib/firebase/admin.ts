@@ -225,7 +225,6 @@ export async function getUsers(role?: string): Promise<User[]> {
       : query(usersRef);
 
     const querySnapshot = await getDocs(usersQuery);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const users: User[] = [];
 
     querySnapshot.forEach((doc) => {
